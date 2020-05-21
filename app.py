@@ -1,13 +1,35 @@
 #imports
-import time, sys, pygame, math
-import numpy
-
+import time, sys, pygame, math, numpy
+from queue import PriorityQueue
+#BOARD IS POINT[Y][X]
 #Pygame setup
 pygame.init()
 pygame.display.set_caption("Shortest Path Visualizer, Created by: Mootii Mamo, linkedin.com/in/mootii") 
+#set flags
+SETUP_WALLS = 0
+SET_POINTS = 1
+DISPLAY_INFO = 2
+#color flags
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+YELLOW = (255, 255, 0)
+#for clarity
+x = 0
+y = 1
+        
+'''class Node():
+    def __init__(self, parentNode, pos):
+        self.position = pos
+        self.parent = parentNode
+        self.g = 0
+        self.h = 0
+        self.f = 0
 
+    def __eq__(self, otherNode):
+        return self.position == otherNode.position'''
 
-class Display():
+class Grid():
     def __init__(self, row, col):
         #display settings
         self.screen = pygame.display.set_mode((col-30, row+30))
@@ -17,7 +39,7 @@ class Display():
         self.row = row//30
         self.col = col//30
         #main board
-        self.board = numpy.zeros((self.row, self.col))
+        self.board = numpy.zeros((self.row-1, self.col-1))
         self.barredPoints = []
         #boardButtons
         self.wallButton = buttonSetup(self, 0)
@@ -33,13 +55,13 @@ class Display():
                 for j in range(self.col-1):
                     rect = pygame.Rect(j*30, i*30, 30, 30)
                     if(self.board[i][j] == 0):
-                        pygame.draw.rect(self.screen, (0, 0, 0), rect, 1)
+                        pygame.draw.rect(self.screen, BLACK, rect, 1)
                     elif(self.board[i][j] == 1):
-                        pygame.draw.rect(self.screen, (255, 0, 0), rect, 0)
+                        pygame.draw.rect(self.screen, RED, rect, 0)
                     elif(self.board[i][j] == 2):
-                        pygame.draw.rect(self.screen, (0, 255, 0), rect, 0)
+                        pygame.draw.rect(self.screen, GREEN, rect, 0)
                     elif(self.board[i][j] == 3):
-                        pygame.draw.rect(self.screen, (255, 255, 0), rect, 0)
+                        pygame.draw.rect(self.screen, YELLOW, rect, 0)
                     
         self.wallButton.drawButton()
         self.locButton.drawButton()
@@ -60,18 +82,43 @@ class Display():
     def sync(self, board):
         self.board = board
 
-class dijkstraSolver():
+class aStarAlgorithmSolver():
     def __init__(self, board, display):
         self.board = board
         self.dis = display
         self.checkedPoints = []
-    #def solve(self):
+
+
+    def algorithm(self, p1, p2):
+        if (p1 == p2):
+            return
+        startNode = Node(p1[x], p1[y], None)
+
+        q = PriorityQueue()
+        q.put((0, startNode))
+        #for i in range(len(self.board)):
+            #for j in range(len(self.board[i])):
+                #if(self.board[i][j] not in self.dis.barredPoints):
+                    #currNode = Node(j, i, None)
+                    #currNode.cost = self.checkDist(p1, (j, i))
+                    #q.put((-currNode.cost, currNode))
+
+        while(not q.empty()):
+            #gets lowest cost
+            p = q.get()
+            if(p.coord == p2):
+                return
+            if (p[x]+1 < 29):
+                q.append((p[x]+1, p[y]))
+            if (p[x]-1 >= 0):
+                q.append((p[x]-1, p[y]))
+            if (p[y]+1 < 29):
+                q.append((p[x], p[y]+1))
+            if (p[y]-1 >= 0):
+                q.append((p[x], p[y]-1))
+
 
     def recurseSides(self, p1, p2):
-        #for clarity
-        x = 0
-        y = 1
-        ignore = [1, 3]
         if (p1 == p2):
             return
 
@@ -124,28 +171,33 @@ class buttonSetup():
         self.buttonType = buttonType
 
     def drawButton(self):
-        if (self.buttonType == 0):
+        #Drawing the clear board button
+        if (self.buttonType == SETUP_WALLS):
             image = pygame.image.load('Wallbutton.png').convert()
             self.wallRect = image.get_rect()
             self.wallRect.center = (self.pixels[0]//3, self.pixels[1])
             self.screen.blit(image, self.wallRect)
-        elif (self.buttonType == 1):
+        #drawing the set points button
+        elif (self.buttonType == SET_POINTS):
             image = pygame.image.load('Pointbutton.png').convert()
             self.pointRect = image.get_rect()
             self.pointRect.center = (((self.pixels[0]-self.pixels[0]//3), self.pixels[1]))
             self.screen.blit(image, self.pointRect)
-        elif (self.buttonType == 2):
+        #drawing the info button
+        elif (self.buttonType == DISPLAY_INFO):
             image = pygame.image.load('infobutton.png').convert()
             self.infoRect = image.get_rect()
             self.infoRect.center = ((25, self.pixels[1]+5))
             self.screen.blit(image, self.infoRect)
 
+    #loading up directions for point setting
     def pointClicked(self):
         image = pygame.image.load('box.png').convert()
         self.inRect = image.get_rect()
         self.inRect.center = (self.pixels[0]//2, self.pixels[1]//2)
         self.screen.blit(image, self.inRect)
 
+    #loading up the information box
     def infoClicked(self):
         image = pygame.image.load('info.png').convert()
         self.infotextRect = image.get_rect()
@@ -156,7 +208,7 @@ class buttonSetup():
 
 def main():
     #Startup the display
-    dis = Display(900, 900)
+    dis = Grid(900, 900)
     #Conditionals
     notSetupBox = False
     begin = False
@@ -171,13 +223,16 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 loc = pygame.mouse.get_pos()
+                #Clicking Clear Board
                 if(dis.wallButton.wallRect.collidepoint(loc)):
                     dis.clear()
                     begin = False
                     notSetupBox = False
                     overlay = 0
                     twoPointCounter = 0
+                    dis.barredPoints = []
                     twoPointList = []
+                #clicking setup points
                 elif(dis.locButton.pointRect.collidepoint(loc)):
                     dis.locButton.pointClicked()
                     begin = True
@@ -199,7 +254,7 @@ def main():
                         dis.mark(loc[1]//30, loc[0]//30)
                         twoPointCounter = twoPointCounter + 1
                         if (twoPointCounter == 2):
-                            s = dijkstraSolver(dis.board, dis)
+                            s = aStarAlgorithmSolver(dis.board, dis)
                             s.recurseSides(twoPointList[0], twoPointList[1])
                             #dis.sync(s.getBoard)
                             #print(str(s.checkDist()))
