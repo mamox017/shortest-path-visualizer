@@ -35,7 +35,9 @@ def main():
     
     #Main loop
     while 1:
+        #get events from pygame event queue
         for event in pygame.event.get():
+            #if there is a click on the screen, choose from these options
             if event.type == pygame.MOUSEBUTTONDOWN:
                 loc = pygame.mouse.get_pos()
                 #Clicking Clear Board
@@ -61,14 +63,17 @@ def main():
                 elif(overlay and notSetupBox and dis.locButton.inRect.collidepoint(loc)):
                     overlay = False
                     notSetupBox = False
+                #removing messages from screen
                 elif(overlay and not notSetupBox):
+                    #remove fail message from screen
                     if (dis.locButton.failtextRect):
                         if (dis.locButton.failtextRect.collidepoint(loc)):
                             overlay = False
+                    #remove info message from screen
                     elif (dis.infoButton.infotextRect):
                         if (dis.infoButton.infotextRect.collidepoint(loc)):
                             overlay = False
-                    #set up point choosing
+                #if it is time to select the start and end points
                 elif(loc[0]//30 < 29 and loc[1]//30 < 29 and not overlay and begin):
                     if (twoPointCounter < 2):
                         twoPointList.append((loc[0]//30, loc[1]//30))
@@ -90,21 +95,24 @@ def main():
                                         dis.mark(path[i][1], path[i][0])
                                     else:
                                         s.markPath(path[i])
-
-                            
+                #selecting wall points
                 elif(loc[0]//30 < 29 and loc[1]//30 < 29 and not overlay and not begin):
                     dis.mousedown = True
                     dis.color(loc[1]//30, loc[0]//30)
+            #letting go of mouse click
             elif event.type == pygame.MOUSEBUTTONUP:
                 dis.mousedown = False
+            #holding the mouse down
             elif event.type == pygame.MOUSEMOTION:
                 if dis.mousedown:
                     col, row = event.pos
                     if(col//30 < len(dis.board[0]) and row//30 < len(dis.board[0])):
                         dis.color(row//30, col//30)
+            #clicking the X to exit
             elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+        #updating screen
         dis.draw(overlay)
         pygame.display.flip()
 

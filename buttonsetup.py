@@ -1,3 +1,4 @@
+#imports
 import pygame
 #set flags
 SETUP_WALLS = 0
@@ -9,8 +10,9 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
 
-
+#class for creating buttons
 class buttonSetup():
+    #constructor
     def __init__(self, display, buttonType):
         self.screen = display.screen
         self.pixels = display.screenSize
@@ -22,6 +24,7 @@ class buttonSetup():
         self.infotextRect = None
         self.failtextRect = None
 
+    #drawing method
     def drawButton(self):
         #Drawing the clear board button
         if (self.buttonType == SETUP_WALLS):
@@ -56,7 +59,7 @@ class buttonSetup():
         self.infotextRect.center = (self.pixels[0]//2, self.pixels[1]//2)
         self.screen.blit(image, self.infotextRect)
 
-    #drawing failed info box
+    #drawing fail message info box for impossible paths
     def failedMessage(self):
         image = pygame.image.load('png/fail_message.png').convert()
         self.failtextRect = image.get_rect()

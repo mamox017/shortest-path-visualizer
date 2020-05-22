@@ -1,3 +1,4 @@
+#imports
 import numpy as np
 import pygame
 from buttonsetup import *
@@ -13,7 +14,9 @@ GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 
+#grid class that manages the board
 class grid():
+    #constructor
     def __init__(self, row, col):
         #display settings
         self.screen = pygame.display.set_mode((col-30, row+30))
@@ -31,9 +34,11 @@ class grid():
         self.infoButton = buttonSetup(self, DISPLAY_INFO)
         self.mousedown = False
 
-    #instead of drawing all every loop, draw single dots
+    #drawing the board
     def draw(self, overlay):
+        #if there isn't a text box displayed currently
         if (not overlay):
+            #fill screen and draw in squares
             self.screen.fill((150, 150, 150))
             for i in range(self.row-1):
                 for j in range(self.col-1):
@@ -48,22 +53,26 @@ class grid():
                         pygame.draw.rect(self.screen, YELLOW, rect, 0)
                     elif(self.board[i][j] == 4):
                         pygame.draw.rect(self.screen, BLUE, rect, 0)
-                    
+        #draw buttons 
         self.wallButton.drawButton()
         self.locButton.drawButton()
         self.infoButton.drawButton()
         pygame.display.flip()
                     
+    #mark walls as red and keeps track of them
     def color(self, row, col):
         self.barredPoints.append((col, row))
         self.board[row][col] = 1
 
+    #mark chosen points (start and end points)
     def mark(self, row, col):
         self.board[row][col] = 2
 
+    #clearing the grid array
     def clear(self):
         self.board = np.zeros((self.row, self.col))
         self.screen.fill((150, 150, 150))
 
+    #syncing board to a given array for test purposes
     def sync(self, board):
         self.board = board
