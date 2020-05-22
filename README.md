@@ -23,5 +23,4 @@ This shortest path visualizer is written in Python in order to showcase the A* p
 [Coming Soon]
 
 # todo
-- Highlight tested squares in order to show where path has checked before highlighting final path
 - Unit testing
