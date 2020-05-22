@@ -1,6 +1,6 @@
 # (Python) Shortest Path Visualizer
 ![Example](https://i.imgur.com/4QuGrzd.png)
-This shortest path visualizer is written in Python in order to showcase the A* pathfinding algorithm in a graphical grid.
+This shortest path visualizer is written in Python in order to showcase the A* pathfinding algorithm in a graphical grid.  In this program, you are allowed to draw obstacles that will challenge the algorithm to avoid them in pursuit of the shortest path between your chosen start and end points.
 
 # Dependencies
 - Pygame
