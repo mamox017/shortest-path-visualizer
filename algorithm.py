@@ -1,4 +1,5 @@
 import numpy as np
+import time
 import heapq
 
 class aStarAlgorithmSolver():
@@ -52,6 +53,9 @@ class aStarAlgorithmSolver():
                 if neighbor in closed and gscore_x >= gscore.get(neighbor, 0):
                     continue
                 if  gscore_x < gscore.get(neighbor, 0) or neighbor not in [i[1]for i in holder]:
+                    self.markChecked(neighbor)
+                    self.dis.draw(0)
+                    #time.sleep(.001)
                     came_from[neighbor] = currPoint
                     gscore[neighbor] = gscore_x
                     fscore[neighbor] = gscore_x + self.heuristicCalculator(neighbor, goal)
@@ -60,6 +64,9 @@ class aStarAlgorithmSolver():
 
     def markPath(self, point):
         self.board[point[1]][point[0]] = 3
+
+    def markChecked(self, point):
+        self.board[point[1]][point[0]] = 4
 
     def checkDist(self, p1, p2):
         initialYDist = p2[y]-p1[y]

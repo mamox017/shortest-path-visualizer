@@ -11,6 +11,7 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
+BLUE = (0, 0, 255)
 
 class grid():
     def __init__(self, row, col):
@@ -45,6 +46,8 @@ class grid():
                         pygame.draw.rect(self.screen, GREEN, rect, 0)
                     elif(self.board[i][j] == 3):
                         pygame.draw.rect(self.screen, YELLOW, rect, 0)
+                    elif(self.board[i][j] == 4):
+                        pygame.draw.rect(self.screen, BLUE, rect, 0)
                     
         self.wallButton.drawButton()
         self.locButton.drawButton()
