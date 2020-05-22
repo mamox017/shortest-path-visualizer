@@ -7,10 +7,11 @@ class aStarAlgorithmSolver():
         self.dis = display
         self.checkedPoints = []
 
+    #formula for heuristic
     def heuristicCalculator(self, x, y):
         return np.sqrt((y[0]-x[0]) ** 2 + (y[1]-x[1]) ** 2)
 
-    # A* search
+    #A* search main algorithm
     def astar_search(self, board, start, goal):
         #neighbors to check with each iteration (no diagonals allowed)
         neighbors = [(0,1),(0,-1),(1,0),(-1,0)]
