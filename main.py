@@ -85,8 +85,11 @@ def main():
                                 dis.locButton.failedMessage()
                                 overlay = True
                             else:
-                                for i in path:
-                                    s.markPath(i)
+                                for i in range(len(path)):
+                                    if(i == 0):
+                                        dis.mark(path[i][1], path[i][0])
+                                    else:
+                                        s.markPath(path[i])
 
                             
                 elif(loc[0]//30 < 29 and loc[1]//30 < 29 and not overlay and not begin):
