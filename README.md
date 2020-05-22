@@ -25,3 +25,4 @@ This shortest path visualizer is written in Python in order to showcase the A* p
 
 # todo
 - Unit testing
+- Build executable and add download link
