@@ -17,6 +17,9 @@ This shortest path visualizer is written in Python in order to showcase the A* p
 - Click "Setup Points" in order to choose the beginning and end of the path
 - The visualizer will display the shortest path between the two points
 
+# Releases (executable)
+[Coming Soon]
+
 # todo
 - Highlight tested squares in order to show where path has checked before highlighting final path
 - Unit testing
