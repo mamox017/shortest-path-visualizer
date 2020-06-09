@@ -21,8 +21,7 @@ This shortest path visualizer is written in Python in order to showcase the A* p
 ![Vid](https://i.imgur.com/q4X7pER.gif)
 
 # Releases (executable)
-[Coming Soon]
+## [Download Here](https://download850.mediafire.com/z571r1aqxhig/bisqx2vmy9jipxz/Shortest+Path+Visualizer.exe)
 
 # todo
 - Unit testing
-- Build executable and add download link
