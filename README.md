@@ -12,6 +12,10 @@ This shortest path visualizer is written in Python in order to showcase the A* p
   - Sys
   - Math
 
+# Releases
+## [Download Here! (.exe)](https://download850.mediafire.com/z571r1aqxhig/bisqx2vmy9jipxz/Shortest+Path+Visualizer.exe)
+
+
 # Directions
 - Compile and run the main.py file in order to run the visualizer
 - Set red wall obstacles in which the path will avoid
@@ -19,9 +23,6 @@ This shortest path visualizer is written in Python in order to showcase the A* p
 - The visualizer will display the shortest path between the two points
 
 ![Vid](https://i.imgur.com/q4X7pER.gif)
-
-# Releases
-## [Download Here! (.exe)](https://download850.mediafire.com/z571r1aqxhig/bisqx2vmy9jipxz/Shortest+Path+Visualizer.exe)
 
 
 # todo
